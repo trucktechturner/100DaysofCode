@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<title>Unit Converter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F5F7; --surface:#FFFFFF; --surface-2:#EEF0F3; --line:#E2E5EA;
+  --text:#101828; --muted:#667085; --accent:#E85D1A; --accent-2:#FF7A2E;
+  --accent-soft:#FFF1E8; --dark:#101828; --radius:20px;
+  --shadow:0 10px 30px rgba(16,24,40,.08), 0 2px 6px rgba(16,24,40,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0C0E12; --surface:#171A21; --surface-2:#1F232E; --line:#2A2F3D; --text:#F2F4F7; --muted:#98A2B3; --accent-soft:#2A1A12; --shadow:0 10px 30px rgba(0,0,0,.35); }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Outfit",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:880px;margin:0 auto;padding:20px 18px 36px}
+.top{padding:10px 2px 18px}
+.top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+h1{font-size:42px;line-height:.95;letter-spacing:-.03em;margin:0;font-weight:800}
+h1 span{color:var(--accent)}
+.sub{margin:10px 0 0;color:var(--muted);font-size:16px;line-height:1.5;max-width:560px}
+.badge{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600;white-space:nowrap;box-shadow:var(--shadow)}
+.dot{width:8px;height:8px;border-radius:50%;background:#12B76A;box-shadow:0 0 0 4px #12B76A22}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
+.tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;padding:10px;border-bottom:1px solid var(--line);background:var(--surface)}
+.tab{min-height:44px;border:1px solid transparent;background:transparent;border-radius:14px;padding:10px 4px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px}
+.tab small{font-size:18px;line-height:1}
+.tab.active{background:var(--dark);color:#fff;border-color:var(--dark)}
+@media (prefers-color-scheme: dark){ .tab.active{background:var(--accent);border-color:var(--accent)} }
+.main{padding:20px}
+.input-label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:8px}
+.big-input{width:100%;border:2px solid var(--line);background:var(--surface-2);border-radius:16px;padding:16px 16px;font-family:"IBM Plex Mono",monospace;font-size:32px;font-weight:600;outline:none;color:var(--text)}
+.big-input:focus{border-color:var(--accent);background:var(--surface)}
+.grid{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:end;margin-top:16px}
+select{width:100%;min-height:52px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);padding:0 12px;font:inherit;font-weight:600;font-size:15px;color:var(--text)}
+.swap{width:52px;height:52px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center;box-shadow:0 8px 18px rgba(232,93,26,.35);transition:.15s}
+.swap:active{transform:rotate(180deg) scale(.96)}
+.result{margin-top:18px;background:var(--dark);color:#fff;border-radius:18px;padding:20px;display:flex;justify-content:space-between;gap:16px;align-items:flex-end;flex-wrap:wrap}
+@media (prefers-color-scheme: dark){ .result{background:#232833;border:1px solid var(--line)} }
+.result-label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.7;font-weight:700}
+.result-value{font-family:"IBM Plex Mono",monospace;font-size:36px;line-height:1;font-weight:600;margin-top:6px;word-break:break-all}
+.result-formula{font-size:13px;opacity:.75;margin-top:6px}
+.copy-btn{min-height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;padding:0 16px;font:inherit;font-weight:700;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{min-height:36px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.section-title{font-size:18px;font-weight:800;letter-spacing:-.02em;margin:26px 0 12px;display:flex;justify-content:space-between;align-items:center}
+.pop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pop{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;cursor:pointer;text-align:left}
+.pop:hover{border-color:var(--accent)}
+.pop b{display:block;font-size:14px}
+.pop span{font-size:13px;color:var(--muted);font-family:"IBM Plex Mono",monospace}
+.history{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.history li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;gap:12px;font-size:14px}
+.history li span:last-child{font-family:"IBM Plex Mono",monospace;font-weight:600}
+.empty{color:var(--muted);font-size:14px;background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:14px;text-align:center}
+.footer{margin-top:22px;text-align:center;color:var(--muted);font-size:13px;line-height:1.6}
+.kbd{font-family:"IBM Plex Mono",monospace;background:var(--surface-2);border:1px solid var(--line);border-bottom-width:2px;padding:1px 6px;border-radius:6px;font-size:12px}
+@media(max-width:640px){
+  h1{font-size:36px}
+  .tabs{grid-template-columns:repeat(3,1fr)}
+  .grid{grid-template-columns:1fr 52px 1fr}
+  .pop-grid{grid-template-columns:1fr 1fr}
+  .result-value{font-size:30px}
+  .big-input{font-size:28px}
+  .main{padding:16px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="top-row">
+      <div>
+        <h1>Unit<br><span>Converter</span></h1>
+        <p class="sub">Fast, no-fuss conversions for the road, the shop, and everyday life. Imperial ↔ metric, done in one tap.</p>
+      </div>
+      <div class="badge"><span class="dot"></span> 6 categories • 32 units</div>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <div class="main">
+      <div class="input-label">Enter value</div>
+      <input class="big-input" id="amount" type="number" inputmode="decimal" value="1" placeholder="0" aria-label="Value to convert">
+      <div class="grid">
+        <div>
+          <div class="input-label">From</div>
+          <select id="fromUnit" aria-label="From unit"></select>
+        </div>
+        <button class="swap" id="swapBtn" aria-label="Swap units" title="Swap units">⇄</button>
+        <div>
+          <div class="input-label">To</div>
+          <select id="toUnit" aria-label="To unit"></select>
+        </div>
+      </div>
+
+      <div class="result">
+        <div style="flex:1;min-width:200px">
+          <div class="result-label">Result</div>
+          <div class="result-value" id="resultValue">—</div>
+          <div class="result-formula" id="formula">—</div>
+        </div>
+        <button class="copy-btn" id="copyBtn">Copy result</button>
+      </div>
+
+      <div class="chips" id="quickChips"></div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Popular right now <span style="font-size:13px;color:var(--muted);font-weight:600">Tap to try →</span></h2>
+  <div class="pop-grid" id="popGrid"></div>
+
+  <h2 class="section-title">Recent conversions <button id="clearHist" style="border:none;background:none;font:inherit;font-size:13px;font-weight:700;color:var(--accent);cursor:pointer;min-height:36px">Clear</button></h2>
+  <div id="histWrap"></div>
+
+  <p class="footer">Built for quick checks — try <span class="kbd">100 km/h → mph</span> or <span class="kbd">200 lb → kg</span>.<br>What should I build next? A tip calculator, BMI calculator, or password generator?</p>
+</div>
+
+<script>
+const DATA = {
+  length: { label:"Length", icon:"📏", base:"metre", units:{
+    mm:{label:"Millimetres (mm)", factor:0.001}, cm:{label:"Centimetres (cm)", factor:0.01}, m:{label:"Metres (m)", factor:1}, km:{label:"Kilometres (km)", factor:1000},
+    in:{label:"Inches (in)", factor:0.0254}, ft:{label:"Feet (ft)", factor:0.3048}, yd:{label:"Yards (yd)", factor:0.9144}, mi:{label:"Miles (mi)", factor:1609.344}
+  }, defaults:["km","mi"], quick:[1,5,10,26.2,100]},
+  weight: { label:"Weight", icon:"⚖️", base:"kilogram", units:{
+    g:{label:"Grams (g)", factor:0.001}, kg:{label:"Kilograms (kg)", factor:1}, oz:{label:"Ounces (oz)", factor:0.0283495}, lb:{label:"Pounds (lb)", factor:0.453592}, st:{label:"Stone (st)", factor:6.35029}, ton:{label:"US Ton (ton)", factor:907.185}
+  }, defaults:["lb","kg"], quick:[150,180,200,220,1000]},
+  temp: { label:"Temp", icon:"🌡️", base:"celsius", units:{
+    c:{label:"Celsius (°C)"}, f:{label:"Fahrenheit (°F)"}, k:{label:"Kelvin (K)"}
+  }, defaults:["c","f"], quick:[0,20,37,100,-40]},
+  volume: { label:"Volume", icon:"🥤", base:"litre", units:{
+    ml:{label:"Millilitres (mL)", factor:0.001}, l:{label:"Litres (L)", factor:1}, floz:{label:"Fluid oz (fl oz)", factor:0.0295735}, cup:{label:"Cups", factor:0.236588}, pt:{label:"Pints (pt)", factor:0.473176}, qt:{label:"Quarts (qt)", factor:0.946353}, gal:{label:"Gallons US (gal)", factor:3.78541}
+  }, defaults:["l","gal"], quick:[1,2,3.785,5,20]},
+  speed: { label:"Speed", icon:"🚛", base:"km/h", units:{
+    kmh:{label:"Kilometres / h (km/h)", factor:1}, mph:{label:"Miles / h (mph)", factor:1.609344}, ms:{label:"Metres / s (m/s)", factor:3.6}, kn:{label:"Knots (kn)", factor:1.852}
+  }, defaults:["kmh","mph"], quick:[50,80,100,110,120]},
+  area: { label:"Area", icon:"🏠", base:"sq metre", units:{
+    sqm:{label:"Sq metres (m²)", factor:1}, sqft:{label:"Sq feet (ft²)", factor:0.092903}, acre:{label:"Acres", factor:4046.86}, ha:{label:"Hectares (ha)", factor:10000}, sqkm:{label:"Sq kilometres (km²)", factor:1e6}, sqmi:{label:"Sq miles (mi²)", factor:2589988.11}
+  }, defaults:["sqft","sqm"], quick:[500,1000,1500,2000,5000]}
+};
+
+const POPULAR = [
+  {cat:"speed", from:"kmh", to:"mph", val:100, title:"100 km/h → mph", sub:"Highway speed in Canada"},
+  {cat:"weight", from:"lb", to:"kg", val:180, title:"180 lb → kg", sub:"Body weight"},
+  {cat:"length", from:"mi", to:"km", val:1, title:"1 mile → km", sub:"Road distance"},
+  {cat:"temp", from:"c", to:"f", val:20, title:"20°C → °F", sub:"Room temperature"},
+  {cat:"volume", from:"gal", to:"l", val:1, title:"1 gallon → litres", sub:"Fuel & fluids"},
+  {cat:"length", from:"ft", to:"m", val:6, title:"6 ft → metres", sub:"Height"},
+];
+
+let currentCat = "length";
+let history = [];
+
+const tabsEl=document.getElementById('tabs'), fromEl=document.getElementById('fromUnit'), toEl=document.getElementById('toUnit'), amtEl=document.getElementById('amount'), resEl=document.getElementById('resultValue'), formEl=document.getElementById('formula'), chipsEl=document.getElementById('quickChips');
+
+function renderTabs(){
+  tabsEl.innerHTML = Object.entries(DATA).map(([k,v])=>`<button class="tab ${k===currentCat?'active':''}" data-cat="${k}" role="tab"><small>${v.icon}</small>${v.label}</button>`).join('');
+  tabsEl.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{currentCat=b.dataset.cat; initCategory();});
+}
+function fillUnits(){
+  const units=DATA[currentCat].units;
+  const opts=Object.entries(units).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('');
+  fromEl.innerHTML=opts; toEl.innerHTML=opts;
+  fromEl.value=DATA[currentCat].defaults[0]; toEl.value=DATA[currentCat].defaults[1];
+  chipsEl.innerHTML = DATA[currentCat].quick.map(n=>`<button class="chip" data-v="${n}">${n}</button>`).join('') + `<span style="align-self:center;font-size:12px;color:var(--muted);margin-left:4px">Quick values</span>`;
+  chipsEl.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{amtEl.value=c.dataset.v; convert();});
+}
+function convertTemp(val, from, to){
+  let c; if(from==='c') c=val; else if(from==='f') c=(val-32)*5/9; else c=val-273.15;
+  if(to==='c') return c; if(to==='f') return c*9/5+32; return c+273.15;
+}
+function fmt(n){
+  if(!isFinite(n)) return "—";
+  if(n===0) return "0";
+  const abs=Math.abs(n);
+  if(abs>=1e9 || (abs<0.0001 && abs>0)) return n.toExponential(4);
+  return parseFloat(n.toFixed(6)).toLocaleString('en-CA',{maximumFractionDigits:6});
+}
+function unitShort(key){ const l=DATA[currentCat].units[key].label; const m=l.match(/\(([^)]+)\)/); return m?m[1]:key; }
+function convert(pushHist=false){
+  const val=parseFloat(amtEl.value);
+  if(isNaN(val)){ resEl.textContent="—"; formEl.textContent="Enter a number to convert"; return; }
+  let out;
+  if(currentCat==='temp'){ out=convertTemp(val, fromEl.value, toEl.value); }
+  else { const f=DATA[currentCat].units[fromEl.value].factor, t=DATA[currentCat].units[toEl.value].factor; out=val*f/t; }
+  const fromS=unitShort(fromEl.value), toS=unitShort(toEl.value);
+  resEl.textContent=`${fmt(out)} ${toS}`;
+  if(currentCat==='temp'){ formEl.textContent=`${fmt(val)} ${fromS} = ${fmt(out)} ${toS}`; }
+  else { const ratio=DATA[currentCat].units[fromEl.value].factor/DATA[currentCat].units[toEl.value].factor; const ratioStr=parseFloat(ratio.toFixed(7)).toString(); formEl.textContent=`1 ${fromS} = ${ratioStr} ${toS}  •  ${fmt(val)} × ${ratioStr}`; }
+  if(pushHist){
+    const entry=`${fmt(val)} ${fromS} → ${fmt(out)} ${toS}`;
+    if(history[0]!==entry){ history.unshift(entry); history=history.slice(0,5); renderHist(); }
+  }
+}
+function renderHist(){
+  const w=document.getElementById('histWrap');
+  if(!history.length){ w.innerHTML=`<div class="empty">No conversions yet — your last 5 will show here in this session.</div>`; return; }
+  w.innerHTML=`<ul class="history">${history.map(h=>{ const [a,b]=h.split(' → '); return `<li><span>${a}</span><span>→ ${b}</span></li>`}).join('')}</ul>`;
+}
+function initCategory(){ renderTabs(); fillUnits(); amtEl.value = DATA[currentCat].quick[2] ?? 1; convert(); }
+
+document.getElementById('popGrid').innerHTML = POPULAR.map((p,i)=>`<button class="pop" data-i="${i}"><b>${p.title}</b><span>${p.sub}</span></button>`).join('');
+document.querySelectorAll('.pop').forEach(b=>b.onclick=()=>{ const p=POPULAR[+b.dataset.i]; currentCat=p.cat; renderTabs(); fillUnits(); fromEl.value=p.from; toEl.value=p.to; amtEl.value=p.val; convert(true); window.scrollTo({top:0,behavior:'smooth'}); });
+
+fromEl.addEventListener('change',()=>convert(true));
+toEl.addEventListener('change',()=>convert(true));
+amtEl.addEventListener('input',()=>convert(false));
+amtEl.addEventListener('change',()=>convert(true));
+document.getElementById('swapBtn').onclick=()=>{ const t=fromEl.value; fromEl.value=toEl.value; toEl.value=t; convert(true); };
+document.getElementById('clearHist').onclick=()=>{history=[]; renderHist();};
+document.getElementById('copyBtn').onclick=async(e)=>{
+  const txt=`${amtEl.value} ${unitShort(fromEl.value)} = ${resEl.textContent}`;
+  try{ await navigator.clipboard.writeText(txt); e.target.textContent="Copied ✓"; setTimeout(()=>e.target.textContent="Copy result",1400);}catch{ e.target.textContent=txt; }
+};
+
+initCategory(); renderHist(); convert(true);
+</script>
+</body>
+</html>
