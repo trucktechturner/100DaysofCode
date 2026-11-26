@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>My Builds — @web.dev.sam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F5F7; --surface:#FFFFFF; --surface-2:#EEF0F3; --line:#E2E5EA;
+  --text:#101828; --muted:#667085; --accent:#E85D1A; --accent-2:#FF7A2E;
+  --dark:#101828; --radius:20px;
+  --shadow:0 10px 30px rgba(16,24,40,.08), 0 2px 6px rgba(16,24,40,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0C0E12; --surface:#171A21; --surface-2:#1F232E; --line:#2A2F3D; --text:#F2F4F7; --muted:#98A2B3; --shadow:0 10px 30px rgba(0,0,0,.35); }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Outfit",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding:20px 18px 36px}
+.top{padding:10px 2px 18px}
+h1{font-size:42px;line-height:.95;letter-spacing:-.03em;margin:0;font-weight:800}
+h1 span{color:var(--accent)}
+.sub{margin:10px 0 0;color:var(--muted);font-size:16px;line-height:1.5;max-width:560px}
+.badge{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600;white-space:nowrap;box-shadow:var(--shadow);margin-top:14px}
+.dot{width:8px;height:8px;border-radius:50%;background:#12B76A;box-shadow:0 0 0 4px #12B76A22}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){ .grid{grid-template-columns:1fr} h1{font-size:36px} }
+.card{background:var(--surface);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:22px;display:flex;flex-direction:column}
+.card h2{font-size:22px;margin:0 0 8px;letter-spacing:-.02em}
+.card p{color:var(--muted);font-size:15px;line-height:1.55;margin:0 0 16px;flex:1}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:700;font-size:15px;text-align:center;border-radius:999px;padding:13px 18px;box-shadow:0 8px 18px rgba(232,93,26,.35)}
+.btn:hover{background:var(--accent-2)}
+.footer{margin-top:26px;text-align:center;color:var(--muted);font-size:13px;line-height:1.6}
+.footer a{color:var(--accent);font-weight:700;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>My<br><span>Builds</span></h1>
+    <p class="sub">Things I'm building while learning web dev. Try them out below — no sign-up, nothing to install.</p>
+    <div class="badge"><span class="dot"></span> @web.dev.sam • Built in public</div>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <div class="tag">Build 01</div>
+      <h2>Unit Converter</h2>
+      <p>Length, Weight, Temperature, Volume, Speed and Area — 32 units, with live conversion, a swap button and copy result.</p>
+      <a class="btn" href="unit-converter/">Try the Unit Converter →</a>
+    </div>
+
+    <div class="card">
+      <div class="tag">Build 02</div>
+      <h2>Gym Rest Timer</h2>
+      <p>60, 90 and 120 second presets, with Start, Pause and Reset. Counts down in mm:ss — built for rests between sets.</p>
+      <a class="btn" href="gym-rest-timer/">Try the Gym Rest Timer →</a>
+    </div>
+  </div>
+
+  <p class="footer">See the code on <a href="https://github.com/trucktechturner/100DaysofCode">GitHub</a>.<br>What should I build next?</p>
+</div>
+</body>
+</html>
