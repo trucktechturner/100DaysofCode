@@ -60,7 +60,66 @@
     <button id="resetBtn">Reset</button>
 
     <script>
-      // JavaScript goes here next
-    </script>
+  let totalSeconds = 90;
+  let remaining = 90;
+  let timerId = null;
+
+  const timeEl = document.getElementById('time');
+  const startBtn = document.getElementById('startBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  function format(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  }
+
+  function show() {
+    timeEl.textContent = format(remaining);
+  }
+
+  function tick() {
+    remaining = remaining - 1;
+    show();
+    if (remaining <= 0) {
+      clearInterval(timerId);
+      timerId = null;
+      startBtn.textContent = 'Start';
+      timeEl.textContent = 'Done!';
+    }
+  }
+
+  startBtn.onclick = function () {
+    if (timerId) {
+      clearInterval(timerId);
+      timerId = null;
+      startBtn.textContent = 'Start';
+    } else {
+      timerId = setInterval(tick, 1000);
+      startBtn.textContent = 'Pause';
+    }
+  };
+
+  resetBtn.onclick = function () {
+    clearInterval(timerId);
+    timerId = null;
+    remaining = totalSeconds;
+    startBtn.textContent = 'Start';
+    show();
+  };
+
+  document.querySelectorAll('[data-seconds]').forEach(function (btn) {
+    btn.onclick = function () {
+      totalSeconds = Number(btn.dataset.seconds);
+      remaining = totalSeconds;
+      clearInterval(timerId);
+      timerId = null;
+      startBtn.textContent = 'Start';
+      show();
+    };
+  });
+
+  show();
+</script>
   </body>
 </html>
